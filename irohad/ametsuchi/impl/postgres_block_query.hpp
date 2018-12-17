@@ -36,11 +36,11 @@ namespace iroha {
           std::shared_ptr<shared_model::interface::BlockJsonDeserializer>
               converter);
 
-      std::vector<wTransaction> getAccountTransactions(
-          const shared_model::interface::types::AccountIdType &account_id)
-          override;
+//      boost::optional<std::vector<wTransaction>> getAccountTransactions(
+//          const shared_model::interface::types::AccountIdType &account_id)
+//          override;
 
-      std::vector<wTransaction> getAccountAssetTransactions(
+      boost::optional<std::vector<wTransaction>> getAccountAssetTransactions(
           const shared_model::interface::types::AccountIdType &account_id,
           const shared_model::interface::types::AssetIdType &asset_id) override;
 
@@ -72,7 +72,7 @@ namespace iroha {
        * @param account_id
        * @return vector of block ids
        */
-      std::vector<shared_model::interface::types::HeightType> getBlockIds(
+      boost::optional<std::vector<shared_model::interface::types::HeightType>> getBlockIds(
           const shared_model::interface::types::AccountIdType &account_id);
       /**
        * Returns block id which contains transaction with a given hash

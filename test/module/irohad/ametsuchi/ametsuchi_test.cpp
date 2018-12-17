@@ -50,8 +50,9 @@ void validateAccountTransactions(B &&blocks,
                                  int call_count,
                                  int command_count) {
   auto txs = blocks->getAccountTransactions(account);
-  ASSERT_EQ(txs.size(), call_count);
-  std::for_each(txs.begin(), txs.end(), [&](const auto &tx) {
+  ASSERT_TRUE(txs);
+  ASSERT_EQ(txs->size(), call_count);
+  std::for_each(txs->begin(), txs->end(), [&](const auto &tx) {
     EXPECT_EQ(tx->commands().size(), command_count);
   });
 }
@@ -72,8 +73,9 @@ void validateAccountAssetTransactions(B &&blocks,
                                       int call_count,
                                       int command_count) {
   auto txs = blocks->getAccountAssetTransactions(account, asset);
-  ASSERT_EQ(txs.size(), call_count);
-  std::for_each(txs.begin(), txs.end(), [&](const auto &tx) {
+  ASSERT_TRUE(txs);
+  ASSERT_EQ(txs->size(), call_count);
+  std::for_each(txs->begin(), txs->end(), [&](const auto &tx) {
     EXPECT_EQ(tx->commands().size(), command_count);
   });
 }

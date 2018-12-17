@@ -120,8 +120,8 @@ class BlockQueryTest : public AmetsuchiTest {
 TEST_F(BlockQueryTest, GetAccountTransactionsFromSeveralBlocks) {
   // Check that creator1 has created 3 transactions
   auto txs = blocks->getAccountTransactions(creator1);
-  ASSERT_EQ(txs.size(), 3);
-  std::for_each(txs.begin(), txs.end(), [&](const auto &tx) {
+  ASSERT_EQ(txs->size(), 3);
+  std::for_each(txs->begin(), txs->end(), [&](const auto &tx) {
     EXPECT_EQ(tx->creatorAccountId(), creator1);
   });
 }
@@ -136,8 +136,8 @@ TEST_F(BlockQueryTest, GetAccountTransactionsFromSeveralBlocks) {
 TEST_F(BlockQueryTest, GetAccountTransactionsFromSingleBlock) {
   // Check that creator1 has created 1 transaction
   auto txs = blocks->getAccountTransactions(creator2);
-  ASSERT_EQ(txs.size(), 1);
-  std::for_each(txs.begin(), txs.end(), [&](const auto &tx) {
+  ASSERT_EQ(txs->size(), 1);
+  std::for_each(txs->begin(), txs->end(), [&](const auto &tx) {
     EXPECT_EQ(tx->creatorAccountId(), creator2);
   });
 }
@@ -151,7 +151,7 @@ TEST_F(BlockQueryTest, GetAccountTransactionsFromSingleBlock) {
 TEST_F(BlockQueryTest, GetAccountTransactionsNonExistingUser) {
   // Check that "nonexisting" user has no transaction
   auto txs = blocks->getAccountTransactions("nonexisting user");
-  ASSERT_EQ(txs.size(), 0);
+  ASSERT_EQ(txs->size(), 0);
 }
 
 /**

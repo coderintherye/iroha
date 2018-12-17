@@ -69,7 +69,7 @@ namespace iroha {
       return getBlocks(last_id - count + 1, count);
     }
 
-    std::vector<shared_model::interface::types::HeightType>
+    boost::optional<std::vector<shared_model::interface::types::HeightType>>
     PostgresBlockQuery::getBlockIds(
         const shared_model::interface::types::AccountIdType &account_id) {
       std::vector<shared_model::interface::types::HeightType> result;
@@ -80,7 +80,12 @@ namespace iroha {
                            "WHERE account_id = :id",
            soci::into(row, ind),
            soci::use(account_id));
-      st.execute();
+      try {
+        st.execute();
+      } catch (const std::exception &e) {
+        log_->error("Failed to execute query: {}", e.what());
+        return boost::none;
+      }
 
       processSoci(st, ind, row, [&result](std::string &r) {
         result.push_back(std::stoull(r));
@@ -94,8 +99,14 @@ namespace iroha {
       boost::optional<std::string> block_str;
       auto hash_str = hash.hex();
 
-      sql_ << "SELECT height FROM position_by_hash WHERE hash = :hash",
-          soci::into(block_str), soci::use(hash_str);
+      try {
+        sql_ << "SELECT height FROM position_by_hash WHERE hash = :hash",
+            soci::into(block_str), soci::use(hash_str);
+      } catch (const std::exception &e) {
+        log_->error("Failed to execute query: {}", e.what());
+        return boost::none;
+      }
+
       if (block_str) {
         blockId = std::stoull(block_str.get());
       } else {
@@ -130,15 +141,18 @@ namespace iroha {
       };
     }
 
-    std::vector<BlockQuery::wTransaction>
+    boost::optional<std::vector<BlockQuery::wTransaction>>
     PostgresBlockQuery::getAccountTransactions(
         const shared_model::interface::types::AccountIdType &account_id) {
       std::vector<BlockQuery::wTransaction> result;
       auto block_ids = this->getBlockIds(account_id);
-      if (block_ids.empty()) {
+      if (not block_ids) {
+        return boost::none;
+      }
+      if (block_ids->empty()) {
         return result;
       }
-      for (const auto &block_id : block_ids) {
+      for (const auto &block_id : block_ids.value()) {
         std::vector<std::string> index;
         soci::indicator ind;
         std::string row;
@@ -158,17 +172,20 @@ namespace iroha {
       return result;
     }
 
-    std::vector<BlockQuery::wTransaction>
+    boost::optional<std::vector<BlockQuery::wTransaction>>
     PostgresBlockQuery::getAccountAssetTransactions(
         const shared_model::interface::types::AccountIdType &account_id,
         const shared_model::interface::types::AssetIdType &asset_id) {
       std::vector<BlockQuery::wTransaction> result;
       auto block_ids = this->getBlockIds(account_id);
-      if (block_ids.empty()) {
+      if (not block_ids) {
+        return boost::none;
+      }
+      if (block_ids->empty()) {
         return result;
       }
 
-      for (const auto &block_id : block_ids) {
+      for (const auto &block_id : block_ids.value()) {
         std::vector<std::string> index;
         soci::indicator ind;
         std::string row;
@@ -181,7 +198,12 @@ namespace iroha {
              soci::use(account_id),
              soci::use(block_id),
              soci::use(asset_id));
-        st.execute();
+        try {
+          st.execute();
+        } catch (const std::exception &e) {
+          log_->error("Failed to execute query: {}", e.what());
+          return boost::none;
+        }
 
         processSoci(
             st, ind, row, [&index](std::string &r) { index.push_back(r); });

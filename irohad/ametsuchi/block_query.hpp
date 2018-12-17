@@ -32,8 +32,8 @@ namespace iroha {
        * @param account_id - account_id (accountName@domainName)
        * @return observable of Model Transaction
        */
-      virtual std::vector<wTransaction> getAccountTransactions(
-          const shared_model::interface::types::AccountIdType &account_id) = 0;
+//      virtual boost::optional<std::vector<wTransaction>> getAccountTransactions(
+//          const shared_model::interface::types::AccountIdType &account_id) = 0;
 
       /**
        * Get asset transactions of an account.
@@ -41,7 +41,8 @@ namespace iroha {
        * @param asset_id - asset_id (assetName#domainName)
        * @return observable of Model Transaction
        */
-      virtual std::vector<wTransaction> getAccountAssetTransactions(
+      virtual boost::optional<std::vector<wTransaction>>
+      getAccountAssetTransactions(
           const shared_model::interface::types::AccountIdType &account_id,
           const shared_model::interface::types::AssetIdType &asset_id) = 0;
 

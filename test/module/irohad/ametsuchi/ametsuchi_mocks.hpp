@@ -149,14 +149,14 @@ namespace iroha {
      public:
       MOCK_METHOD1(
           getAccountTransactions,
-          std::vector<wTransaction>(
+          boost::optional<std::vector<wTransaction>>(
               const shared_model::interface::types::AccountIdType &account_id));
       MOCK_METHOD1(getTxByHashSync,
                    boost::optional<wTransaction>(
                        const shared_model::crypto::Hash &hash));
       MOCK_METHOD2(
           getAccountAssetTransactions,
-          std::vector<wTransaction>(
+          boost::optional<std::vector<wTransaction>>(
               const shared_model::interface::types::AccountIdType &account_id,
               const shared_model::interface::types::AssetIdType &asset_id));
       MOCK_METHOD1(

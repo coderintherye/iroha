@@ -143,8 +143,8 @@ namespace iroha {
       insert(block);
 
       auto txs = blocks->getAccountAssetTransactions(creator1, asset);
-      ASSERT_EQ(txs.size(), 1);
-      ASSERT_EQ(txs[0]->hash(), tx_hashes[0]);
+      ASSERT_EQ(txs->size(), 1);
+      ASSERT_EQ(txs->at(0)->hash(), tx_hashes[0]);
     }
 
     /**
@@ -159,8 +159,8 @@ namespace iroha {
       insert(block);
 
       auto txs = blocks->getAccountAssetTransactions(creator2, asset);
-      ASSERT_EQ(txs.size(), 1);
-      ASSERT_EQ(txs[0]->hash(), tx_hashes[0]);
+      ASSERT_EQ(txs->size(), 1);
+      ASSERT_EQ(txs->at(0)->hash(), tx_hashes[0]);
     }
 
     /**
@@ -175,8 +175,8 @@ namespace iroha {
       insert(block);
 
       auto txs = blocks->getAccountAssetTransactions(creator3, asset);
-      ASSERT_EQ(txs.size(), 1);
-      ASSERT_EQ(txs[0]->hash(), tx_hashes[0]);
+      ASSERT_EQ(txs->size(), 1);
+      ASSERT_EQ(txs->at(0)->hash(), tx_hashes[0]);
     }
 
     /**
@@ -197,9 +197,9 @@ namespace iroha {
       insert(block2);
 
       auto txs = blocks->getAccountAssetTransactions(creator1, asset);
-      ASSERT_EQ(txs.size(), 2);
-      for (size_t i = 0; i < txs.size(); i++) {
-        ASSERT_EQ(txs[i]->hash(), tx_hashes[i]);
+      ASSERT_EQ(txs->size(), 2);
+      for (size_t i = 0; i < txs->size(); i++) {
+        ASSERT_EQ(txs->at(i)->hash(), tx_hashes[i]);
       }
     }
   }  // namespace ametsuchi
